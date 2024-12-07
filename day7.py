@@ -1,14 +1,27 @@
 #!/usr/bin/env python
 
+import types
+
+tt = types.SimpleNamespace()
+tt.OP_CONCAT = '||'
+tt.OP_MUL = '*'
+tt.OP_PLUS = '+'
+
 def evaluate(values, ops):
 	for i in range(len(values) - 1):
 		a = values[i]
 		b = values[i + 1]
 
 		if i == 0:
-			result = a + b if ops[i] == '+' else a * b
+			match ops[i]:
+				case tt.OP_CONCAT: result = int(str(a) + str(b))
+				case tt.OP_MUL: result = a * b
+				case tt.OP_PLUS: result = a + b
 		else:
-			result = result + b if ops[i] == '+' else result * b
+			match ops[i]:
+				case tt.OP_CONCAT: result = int(str(result) + str(b))
+				case tt.OP_MUL: result *= b
+				case tt.OP_PLUS: result += b
 
 	return result
 
@@ -18,12 +31,17 @@ def recurse(values, ops, expected, i):
 
 		return evaluate(values, ops) == expected
 
-	ops[i] = '+'
+	ops[i] = tt.OP_PLUS
 
 	if recurse(values, ops, expected, i + 1):
 		return True
 
-	ops[i] = '*'	
+	ops[i] = tt.OP_MUL
+
+	if recurse(values, ops, expected, i + 1):
+		return True
+
+	ops[i] = tt.OP_CONCAT
 
 	return recurse(values, ops, expected, i + 1)
 
@@ -36,7 +54,7 @@ for line in lines:
 	parts = line.split(':')
 	expected = int(parts[0])
 	values = [int(part) for part in parts[1][1:].split(' ')]
-	ops = ['+'] * (len(values) - 1)
+	ops = [None] * (len(values) - 1)
 
 	if recurse(values, ops, expected, 0):
 		sum_ += expected
