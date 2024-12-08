@@ -23,20 +23,30 @@ for y in range(h):
 unique = 0
 
 for key, coords in antennas.items():
+	if len(coords) == 1:
+		continue
+
 	for i in range(len(coords)):
 		for j in range(len(coords)):
 			if i == j:
 				continue
 
-			a = coords[i]
-			b = coords[j]
-			dx = b[0] - a[0]
-			dy = b[1] - a[1]
-			nx = b[0] + dx
-			ny = b[1] + dy
+			ax, ay = coords[i]
+			bx, by = coords[j]
+			dx = bx - ax
+			dy = by - ay
+			nx = bx
+			ny = by
 
-			if nx >= 0 and nx < w and ny >= 0 and ny < h and not antinodes[ny][nx]:
-				antinodes[ny][nx] = True
-				unique += 1
+			while True:
+				if not antinodes[ny][nx]:
+					antinodes[ny][nx] = True
+					unique += 1
+					
+				nx += dx
+				ny += dy
+
+				if not (nx >= 0 and nx < w and ny >= 0 and ny < h):
+					break
 
 print(unique)
