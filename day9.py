@@ -18,26 +18,55 @@ for i, c in enumerate(lines[0]):
 		for j in range(int(c)):
 			blocks.append(DOT)
 
-a = 0
 b = len(blocks) - 1
 
-while a < b:
-	while a < b and blocks[a] != DOT:
-		a += 1
-
-	while a < b and blocks[b] == DOT:
+while True:
+	while blocks[b] == DOT:
 		b -= 1
 
-	blocks[a] = blocks[b]
-	blocks[b] = DOT
+	a = 0
+
+	while blocks[a] != DOT:
+		a += 1
+
+	if a > b:
+		break
+
+	id_ = blocks[b]
+	required = 0
+
+	while blocks[b - required] == id_:
+		required += 1
+
+	while a < b:
+		available = 0
+
+		while blocks[a + available] == DOT:
+			available += 1
+
+		if available >= required:
+			for i in range(required):
+				blocks[a + i] = id_
+				blocks[b - i] = DOT
+
+			break
+
+		a += available
+
+		while blocks[a] != DOT:
+			a += 1
+
+	while blocks[b] == id_:
+		b -= 1
+
+	while blocks[b] == DOT:
+		b -= 1
 
 checksum = 0
 
 for i, block in enumerate(blocks):
-	if block == DOT:
-		break
-
-	checksum += block * i
+	if block != DOT:
+		checksum += block * i
 
 print(checksum)
 	
