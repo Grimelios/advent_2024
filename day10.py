@@ -2,13 +2,6 @@
 
 def recurse(x, y, current):
 	if current == 9:
-		key = (x, y)
-
-		if key in covered:
-			return 0
-
-		covered.add(key)
-
 		return 1
 
 	sum_ = 0
@@ -37,7 +30,6 @@ sum_ = 0
 for y in range(h):
 	for x in range(w):
 		if topological[y][x] == 0:
-			covered = set()
 			sum_ += recurse(x, y, 0)
 
 print(sum_)
