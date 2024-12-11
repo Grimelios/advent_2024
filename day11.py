@@ -1,26 +1,40 @@
 #!/usr/bin/env python
 
+BLINKS = 75
+
+def recurse(stone, depth):
+	if depth == BLINKS:
+		return 1
+
+	key = (stone, depth)
+
+	if key in lookup:
+		return lookup[key]
+
+	if stone == 0:
+		value = recurse(1, depth + 1)
+	else:
+		str_ = str(stone)
+
+		if len(str_) % 2 == 0:
+			left = str_[:len(str_) // 2]
+			right = str_[len(str_) // 2:]
+			value = recurse(int(left), depth + 1) + recurse(int(right), depth + 1)
+		else:
+			value = recurse(stone * 2024, depth + 1)
+
+	lookup[key] = value
+
+	return value
+
 with open('day11.txt') as f:
 	lines = [line for line in f]
 	stones = [int(part) for part in lines[0].split(' ')]
 
-for i in range(25):
-	next_ = []
+sum_ = 0
+lookup = { }
 
-	for i, stone in enumerate(stones):
-		if stone == 0:
-			next_.append(1)
-		else:
-			str_ = str(stone)
+for stone in stones:
+	sum_ += recurse(stone, 0)
 
-			if len(str_) % 2 == 0:
-				left = str_[:len(str_) // 2]
-				right = str_[len(str_) // 2:]
-				next_.append(int(left))
-				next_.append(int(right))
-			else:
-				next_.append(stone * 2024)
-
-	stones = next_
-
-print(len(stones))
+print(sum_)
