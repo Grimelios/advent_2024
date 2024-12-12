@@ -5,7 +5,7 @@ import os
 MAS = 'MAS'
 SAM = 'SAM'
 
-with open('day4.txt') as f:
+with open('day04.txt') as f:
 	lines = [line.strip() for line in f]
 
 total = 0

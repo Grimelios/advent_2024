@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-with open('day8.txt') as f:
+with open('day08.txt') as f:
 	lines = [line.strip() for line in f]
 
 w = len(lines[0])

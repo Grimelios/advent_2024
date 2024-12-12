@@ -2,7 +2,7 @@
 
 DOT = '.'
 
-with open('day9.txt') as f:
+with open('day09.txt') as f:
 	lines = [line.strip() for line in f]
 
 blocks = []

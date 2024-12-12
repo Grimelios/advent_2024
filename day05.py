@@ -2,7 +2,7 @@
 
 import os
 
-with open('day5.txt') as f:
+with open('day05.txt') as f:
 	lines = [line.strip() for line in f]
 
 i = 0

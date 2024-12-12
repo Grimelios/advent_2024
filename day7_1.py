@@ -27,7 +27,7 @@ def recurse(values, ops, expected, i):
 
 	return recurse(values, ops, expected, i + 1)
 
-with open('day7.txt') as f:
+with open('day07.txt') as f:
 	lines = [line.strip() for line in f]
 
 sum_ = 0

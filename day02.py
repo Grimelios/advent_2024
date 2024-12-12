@@ -46,7 +46,7 @@ def evaluate(report, depth):
 def sign(value):
 	return 1 if value > 0 else -1
 
-with open('day2.txt') as f:
+with open('day02.txt') as f:
 	lines = [line.strip() for line in f]
 
 total_safe = 0
