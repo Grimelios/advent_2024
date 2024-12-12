@@ -14,35 +14,33 @@ def recurse(x, y, plant):
 	bottom = recurse(x, y + 1, plant)
 	left = recurse(x - 1, y, plant)
 	right = recurse(x + 1, y, plant)
+	corners = 0
 
-	if top and bottom and left and right:
-		open_sides = 0
-	elif top and bottom and left:
-		open_sides = 1
-	elif top and bottom and right:
-		open_sides = 1
-	elif top and left and right:
-		open_sides = 1
-	elif bottom and left and right:
-		open_sides = 1
-	elif top and bottom:
-		open_sides = 2
-	elif top and left:
-		open_sides = 2
-	elif top and right:
-		open_sides = 2
-	elif left and right:
-		open_sides = 2
-	elif left and bottom:
-		open_sides = 2
-	elif bottom and right:
-		open_sides = 2
-	elif top or bottom or left or right:
-		open_sides = 3
-	else:
-		open_sides = 4
+	if not top and not left:
+		corners += 1
 
-	region.append(open_sides)
+	if not top and not right:
+		corners += 1
+
+	if not left and not bottom:
+		corners += 1
+
+	if not right and not bottom:
+		corners += 1
+
+	if top and left and lines[y - 1][x - 1] != plant:
+		corners += 1
+
+	if top and right and lines[y - 1][x + 1] != plant:
+		corners += 1
+
+	if left and bottom and lines[y + 1][x - 1] != plant:
+		corners += 1
+
+	if right and bottom and lines[y + 1][x + 1] != plant:
+		corners += 1
+
+	region.append(corners)
 
 	return True
 
@@ -63,9 +61,8 @@ for y in range(h):
 			recurse(x, y, plant)
 
 			area = len(region)
-			perimeter = sum(open_sides for open_sides in region)
-			cost = area * perimeter
-
+			sides = sum(corners for corners in region)
+			cost = area * sides
 			total += cost
 
 print(total)
