@@ -2,8 +2,7 @@
 
 A_COST = 3
 B_COST = 1
-#PRIZE_ERROR = 10000000000000
-PRIZE_ERROR = 0
+PRIZE_ERROR = 10000000000000
 
 class Cell:
 	def __init__(self, line, error):
@@ -20,7 +19,7 @@ class Line:
 	def __init__(self, a, b):
 		self.a = a
 		self.b = b
-		self.v = Point(b.x - a.x, b.y - a.y)
+		self.v = b - a
 
 	def __str__(self):
 		return f'{self.a} -> {self.b}'
@@ -36,8 +35,14 @@ class Point:
 		self.x = x
 		self.y = y
 
+	def __add__(self, other):
+		return Point(self.x + other.x, self.y + other.y)
+
 	def __str__(self):
 		return f'[{self.x}, {self.y}]'
+
+	def __sub__(self, other):
+		return Point(self.x - other.x, self.y - other.y)
 
 def analyze(machine):
 	a = Line(
@@ -54,15 +59,23 @@ def analyze(machine):
 	x = e1[2] * e2[1] - e1[1] * e2[2]
 	y = e1[0] * e2[2] - e1[2] * e2[0]
 	intersect = Point(x / det, y / det)
+	intersect.x = abs(intersect.x)
+	intersect.y = abs(intersect.y)
+	
+	if (int(intersect.x) == intersect.x and 
+		int(intersect.y) == intersect.y and 
+		int(intersect.x) % machine.a.x == 0 and
+		int(intersect.y) % machine.a.y == 0):
 
-	print(f'A {a}')
-	print(f'B {b}')
-	print(f'INTERSECT {intersect}')
+		a_presses = int(intersect.x / machine.a.x)
+		b_presses = int((machine.prize.x - intersect.x) / machine.b.x)
+		
+		return a_presses * A_COST + b_presses * B_COST
 
 	return 0
 
 def coefficients(line):
-	det = determinant(line.a, b)
+	det = determinant(line.a, line.b)
 
 	return (-line.v.y, line.v.x, -det)
 
